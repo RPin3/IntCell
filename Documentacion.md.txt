@@ -1,0 +1,328 @@
+# Documentacion
+## Alan Albino Tellez Giron Lizarraga
+
+```C++
+#ifndef INTCELL_H
+#define INTCELL_H
+```
+El bloque "ifndef INTCELL_H" y "#define INTECELL_H" se utiliza para evitar
+la inclusion mutiple de un archivo de encabezado en un programa C++
+
+### ifndef INTCELL_H
+Esto verifica si "INTCELL_H" esta definido,
+Si no esta definido, significa que este archivo
+de encabezado aun no se ha incluido en el archivo fuente actual
+
+### define INTCELL_H
+Si INTCELL_H no esta definido, esto lo define. Con
+esto se previene que el archivo de encabezado se incluya nuevamente
+en el mismo archivo fuente o en otros archivos fuentes que lo incluyan
+
+```c++
+class IntCell {
+public:
+    IntCell() = default;
+    IntCell(int newValue = 0);
+    IntCell(const IntCell &rhs);
+    IntCell(IntCell &&rhs) noexcept;
+    ~IntCell() = default;
+
+    IntCell &operator=(const IntCell &rhs);
+    IntCell &operator=(IntCell &&rhs) noexcept;
+    IntCell &operator=(int rhs);
+    IntCell &operator+(const IntCell &rhs);
+    IntCell &operator+(int rhs);
+    IntCell &operator-(const IntCell &rhs);
+    IntCell &operator-(int rhs);
+
+    int getValue() const;
+    void setValue(int newValue);
+
+private:
+    int storedValue;
+    int storedValue2;
+    int storedValue3;
+};
+
+```
+### class IntCell{}
+Aqui se define la clase intcell con sus datos y metodos
+
+#### Dentro de la clase IntCell
+
+##### Publico
+
+Dentro de la seccion publica de la clase IntCell podemos encontrar
+
++ Un constructor por defecto que inicializa storedValue a 0
+```C++
+IntCell() = default;
+```
++ Un constructor parametrizado que acepta un int newValue y lo usa para inicializar
+  storedValue
+```C++
+IntCell(int newValue = 0);
+```
++ Un constructor de copia que copia el valor storedValue de otra
+  instancia de IntCell para crear una nueva usando de referencia constante
+  a otra instancia de IntCell como parametro.
++ (La referencia constante asegura que no se modifique la instancia original
+  rhs durante la operacion de copia)
+```C++
+IntCell(const IntCell &rhs);
+```
++ Un constructor de movimiento que toma una instancia existente de IntCell y mueve
+  su valor storedValue a una instancia, dejando la instancia original en un estado valido
+  pero indefinido
++ La palabra clave noexcept indica que este constructor no lanzará excepciones. Esto es importante
+  para el rendimiento, ya que permite a los compiladores optimizar el código.
+```C++
+IntCell(IntCell &&rhs) noexcept;
+```
++ Un destructor predeterminado :D
+```C++
+~IntCell() = default;
+```
++ Sobrecarga del operador de asignacion para copiar
+```C++
+IntCell &operator=(const IntCell &rhs);
+```
++ Sobrecarga del operador de asignacion para mover
+```C++
+IntCell &operator=(IntCell &&rhs) noexcept;
+```
++ Sobrecarga del operador de asignacion para asignar un entero
+```C++
+IntCell &operator=(int rhs);
+```
++ Sobrecarga del operador de suma para sumar con otra IntCell
+```C++
+IntCell &operator+(const IntCell &rhs);
+```
++ Sobrecarga del operador de resta para restar con otra IntCell
+```C++
+IntCell &operator-(const IntCell &rhs);
+```
++ Sobrecarga del operador de resta para restar con un entero
+```C++
+IntCell &operator-(int rhs);
+```
++ Getter que devuelve el valor almacenado en la instancia de IntCell
+```C++
+int getValue() const;
+```
++ Setter que establece el valor almacenado en la instancia de IntCell
+```C++
+void setValue(int newValue);
+```
+##### Privado
+
+Dentro de la seccion privada de la clase IntCell podemos encontrar
+
++ Enteros que almacenan el valor contenido en una celda
+```C++
+int storedValue;
+int storedValue2;
+int storedValue3;
+```
+
+### #endif
+
+Esto es una marca que indica el final del bloque condicional
+de inclusion (
+```C++
+#ifndef INTCELL_H 
+#define INTCELL_H
+```
+)
+
+### Implementation
+```c++
+#include "IntCell.h"
+
+IntCell::IntCell(int newValue) : storedValue(newValue) {}
+
+IntCell::IntCell(const IntCell &rhs) : storedValue(rhs.storedValue) {}
+
+IntCell::IntCell(IntCell &&rhs) noexcept : storedValue(rhs.storedValue) {}
+
+IntCell &IntCell::operator=(const IntCell &rhs) {
+    if (this != &rhs) {
+        storedValue = rhs.storedValue;
+    }
+    return *this;
+}
+
+IntCell &IntCell::operator=(IntCell &&rhs) noexcept {
+    if (this != &rhs) {
+        storedValue = rhs.storedValue;
+        rhs.storedValue = 0;
+    }
+    return *this;
+}
+
+IntCell &IntCell::operator=(int rhs) {
+    storedValue = rhs;
+    return *this;
+}
+
+IntCell &IntCell::operator+(const IntCell &rhs) {
+    storedValue = storedValue + rhs.storedValue;
+    return *this;
+}
+
+IntCell &IntCell::operator+(int rhs) {
+    storedValue = storedValue + rhs;
+    return *this;
+}
+
+IntCell &IntCell::operator-(const IntCell &rhs) {
+    storedValue = storedValue - rhs.storedValue;
+    return *this;
+}
+
+IntCell &IntCell::operator-(int rhs) {
+    storedValue = storedValue - rhs;
+    return *this;
+}
+
+int IntCell::getValue() const {
+    return storedValue;
+}
+
+void IntCell::setValue(int newValue) {
+    storedValue = newValue;
+}
+```
+### Constructores
+
++ Constructor con un parametro de tipo entero
+  + Este constructor inicializa un objeto IntCell con el valor entero
+    new value
+    + Dentro de la memoria este constructor reserva espacio para un nuevo objeto
+    objeto intCell y asigna el valor newValue al atributo storedValue
+```c++
+IntCell::IntCell(int newValue) : storedValue(newValue) {}
+```
++ Constructor de copia
+  + Este constructor crea un nuevo objeto IntCell utilizando otro objeto IntCell ya existente
+  este constructor se utiliza para copiar el valor de storedValue del objeto existente al nuevo objeto
+    + Este constructor asigna una nueva area de memoria para el nuevo objeto y copia el valor de storedValue del objeto
+    existente a la nueva area de memoria.
+```c++
+IntCell::IntCell(const IntCell &rhs) : storedValue(rhs.storedValue) {}
+```
++ Constructor de Movimiento
+  + Este constructor se utiliza para transferir eficientemente la propiedad
+  de valor storedValue de un objeto existente a un nuevo objeto en el momento en que se crea un nuevo 
+  objeto IntCell utilizando otro objeto IntCell
+    + Dentro de la memoria del programa este constructor se encarga de transferir eficientemente
+    la propiedad del valor storedValue desde un objeto IntCell existente hacia un nuevo objeto IntCell que esta
+    siendo creado
+```c++
+IntCell::IntCell(IntCell &&rhs) noexcept : storedValue(rhs.storedValue) {}
+```
+### Operadores de asignacion
++ Operador de asignacion (Copy assignment)
+  + Este operador de asignacion se utiliza para asignar el valor de otro objeto
+  IntCell al objeto actual
+    + Este operador asigna memoria para el nuevo objeto si aun no existe y luego copia
+    el valor del objeto rhs al atributo storedValue del objeto actual
+```C++
+IntCell &IntCell::operator=(const IntCell &rhs) {
+    if (this != &rhs) {
+        storedValue = rhs.storedValue;
+    }
+    return *this;
+}
+```
++ Operador de asignacion por movimiento (move assignment)
+  + Este operador se utiliza para asignar eficientemente el valor de otro objeto IntCell que
+  esta siendo movido al objeto actual
+    + Dentro de la memoria este operador transfiere la propiedad del valor storedValue del objeto
+    rhs al objeto actual, esto se hace sin realizar copias de datos, simplemente moviendo el valor y luego dejando el 
+    valor del objeto rhs en 0.
+```C++
+    IntCell &IntCell::operator=(IntCell &&rhs) noexcept {
+    if (this != &rhs) {
+        storedValue = rhs.storedValue;
+        rhs.storedValue = 0;
+    }
+    return *this;
+}
+```
++ Operador de asignacion para enteros
+  + Este operador de asignacion se utiliza para asignar un valor entero directamente al objeto
+  IntCell
+    + Dentro de la memoria este operador asigna la memoria para el nuevo objeto si aun no existe y establece el valor
+    storedValue del objeto actual con el valor entero rhs
+```c++
+IntCell &IntCell::operator=(int rhs) {
+    storedValue = rhs;
+    return *this;
+}
+```
+### Operadores de sobrecarga
++ Operador de suma **operator+(const IntCell &rhs)**
+  + Este operador sobrecargado permite sumar el valor de otro objeto IntCell
+  al valor del objeto actual
+    + Dentro de la memoria se realiza la suma del valor storedValue del objeto actual
+    con el valor storedValue del objeto rhs. Para que despues el resultado se asigne de vuelva
+    al atributo storedValue del objeto actual y devolver una referencia al objeto actual
+    para permitir el encadenamiento de operadores
+```C++
+IntCell &IntCell::operator+(const IntCell &rhs) {
+    storedValue = storedValue + rhs.storedValue;
+    return *this;
+}
+```
++ Operador de suma **operator+(int rhs)**
+  + Este operador sobrecargado permite sumar un balor entero al valor del objeto actual
+    + Dentro de la memoria de la computadora se realiza la suma del valor storedValue del
+    objeto actual con el valor entero rhs. Para despues asignar el resultado de vuelta al atributo
+    storedValue del objeto actual y devolver una referencia al objeto actual
+      para permitir el encadenamiento de operadores
+```C++
+IntCell &IntCell::operator+(int rhs) {
+    storedValue = storedValue + rhs;
+    return *this;
+}
+```
++ Operador de resta **operator-(const IntCell &rhs)**
+  + Este operador permite restar el valor de otro objeto IntCell al valor del objeto actual.
+    + Dentro de la memoria de la computadora se realiza la resta del valor storedValue del objeto actual
+    con el valor storedValue del objeto rhs. Luego el resultado se asigna de vuelta al atributo storedValue del objeto actual
+    para despues devolver una referencia al objeto actual para permitir el encadenamiento de operadores.
+```C++
+IntCell &IntCell::operator-(const IntCell &rhs) {
+    storedValue = storedValue - rhs.storedValue;
+    return *this;
+}
+```
++ Operador de resta **operator-(int rhs)**
+  + Este operador permite restar un valor entero al valor del objeto actual.
+    + Dentro de la memoria de la computadora se realiza la resta del valor storedValue del objeto
+    actual con el valor entero rhs. Para despues asignar el resultado de vuelta en el atributo storedValue del objeto actual.
+    Despues se devuelve una referencia al objeto actual para permitir el encadenamiento de operadores
+```C++
+IntCell &IntCell::operator-(int rhs) {
+    storedValue = storedValue - rhs;
+    return *this;
+}
+```
+### Getter y Setter
++ Getter
+  + Este metodo retorna el valor almacenado en el objeto IntCell
+    + Este metodo no realiza ningun cambio en la memoria, simplemente devuelve el valor almacenado
+    en el atributo storedValue del objeto accediendo al area de memoria donde esta almacenado
+    storedValue, leer su valor y retornarlo-
+```C++
+int IntCell::getValue() const {
+    return storedValue;
+}
+```
++ Setter
+  + Es metodo en un objeto IntCell actualiza el valor almacenado en el atributo storedValue
+  con el nuevo valor proporcionado
+    + Dentro de la memoria el nuevo valor se almacena en la ubicacion de memoria del atributo
+    storedValue sobreescribiendo el valor anterior.
